@@ -3,7 +3,20 @@ import fastifyMultipart from 'fastify-multipart'
 import fastify from 'fastify'
 import formBodyPlugin from 'fastify-formbody'
 import fastifyReplyFrom from 'fastify-reply-from'
-const server = fastify()
+// import fastifyCors from '@fastify/cors'
+// import multiparty from 'multiparty'
+const server = fastify({logger:false})
+
+// server.addHook('preHandler', function (req, _reply, done) {
+//     var form = new multiparty.Form({autoFiles:true,uploadDir:"./uploads/"})
+//     form.parse(req.raw)
+//     done()
+//   })
+
+// server.register(fastifyCors, {
+//     "origin": "*",
+//     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+//   })
 const port = config.server_port
 
 function combineURLs(baseURL: string, relativeURL: string) { //https://stackoverflow.com/a/49966753
@@ -36,42 +49,51 @@ server.register(async function (app) {
 })
 
 ///////////////////////////////////////////////////////////////////////////////////////////////PROXY
-server.register(fastifyReplyFrom)
+server.register(fastifyReplyFrom,{http: {agentOptions: {keepAliveMsecs: 10 * 60 * 1000},requestOptions: {timeout: 10 * 60 * 1000 }}})
 server.addContentTypeParser('multipart/form-data', function (_request, payload, done) {
     done(null, payload)  //https://github.com/fastify/help/issues/67
 })
-const akaze_routes = ['/akaze_reverse_search', '/calculate_akaze_features', '/delete_akaze_features']
-akaze_routes.forEach((r) => server.post(r, async (_req, res) => {
+const local_features_routes = ['/local_features_get_similar_images_by_image_buffer','/local_features_get_similar_images_by_id', '/calculate_local_features', '/delete_local_features']
+local_features_routes.forEach((r) => server.post(r, async (_req, res) => {
     try {
-        res.from(combineURLs(config.akaze_microservice_url, r))
+        res.from(combineURLs(config.local_features_microservice_url, r))
     } catch (err) {
         console.log(err)
-        res.status(500).send('Akaze microservice is down')
+        res.status(500).send('Local features microservice is down')
     }
 }))
 
-const nn_routes = ['/nn_get_similar_images_by_image_buffer', '/nn_get_similar_images_by_text',
-    '/nn_get_similar_images_by_id', '/calculate_nn_features', '/delete_nn_features', '/nn_get_image_tags_by_image_buffer']
-nn_routes.forEach((r) => server.post(r, async (_req, res) => {
+const global_features_routes = ['/global_features_get_similar_images_by_image_buffer', '/global_features_get_similar_images_by_id', '/calculate_global_features', '/delete_global_features']
+global_features_routes.forEach((r) => server.post(r, async (_req, res) => {
     try {
-        res.from(combineURLs(config.nn_microservice_url, r))
+        res.from(combineURLs(config.global_features_microservice_url, r))
     } catch (err) {
         console.log(err)
-        res.status(500).send('NN microservice is down')
+        res.status(500).send('Global features microservice is down')
     }
 }))
 
-const hist_routes = ['/hist_get_similar_images_by_image_buffer', '/hist_get_similar_images_by_id', '/calculate_hist_features', '/delete_hist_features']
-hist_routes.forEach((r) => server.post(r, async (_req, res) => {
+const color_routes = ['/color_get_similar_images_by_image_buffer', '/color_get_similar_images_by_id', '/calculate_color_features', '/delete_color_features']
+color_routes.forEach((r) => server.post(r, async (_req, res) => {
     try {
-        res.from(combineURLs(config.hist_microservice_url, r))
+        res.from(combineURLs(config.color_microservice_url, r))
     } catch (err) {
         console.log(err)
-        res.status(500).send('HIST microservice is down')
+        res.status(500).send('Color features microservice is down')
     }
 }))
 
-const phash_routes = ['/phash_reverse_search', '/calculate_phash_features', '/delete_phash_features']
+const text_routes = ['/text_get_similar_images_by_image_buffer', '/text_get_similar_images_by_id', '/calculate_text_features', '/delete_text_features']
+text_routes.forEach((r) => server.post(r, async (_req, res) => {
+    try {
+        res.from(combineURLs(config.text_microservice_url, r))
+    } catch (err) {
+        console.log(err)
+        res.status(500).send('Text features microservice is down')
+    }
+}))
+
+const phash_routes = ['/phash_get_similar_images_by_image_buffer', '/calculate_phash_features', '/delete_phash_features']
 phash_routes.forEach((r) => server.post(r, async (_req, res) => {
     try {
         res.from(combineURLs(config.phash_microservice_url, r))

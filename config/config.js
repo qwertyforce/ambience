@@ -1,7 +1,8 @@
 export default {
     server_port:"44444",
-    akaze_microservice_url:"http://localhost:33333",
-    nn_microservice_url:"http://localhost:33334",
-    hist_microservice_url:"http://localhost:33335",
-    phash_microservice_url:"http://localhost:33336",
+    local_features_microservice_url:"http://127.0.0.1:33333",
+    global_features_microservice_url:"http://127.0.0.1:33334",
+    color_microservice_url:"http://127.0.0.1:33335",
+    phash_microservice_url:"http://127.0.0.1:33336",
+    text_microservice_url:"http://127.0.0.1:33339",
 }

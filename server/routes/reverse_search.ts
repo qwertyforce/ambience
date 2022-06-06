@@ -16,13 +16,8 @@ async function reverse_search(req: FastifyRequest<{ Body: FromSchema<typeof body
     } catch (err) {
         return res.status(500).send()
     }
-    const phash_found = await image_ops.phash_reverse_search(image_buffer)
-    if (phash_found.length !== 0) {
-        res.send(phash_found)
-    } else {
-        const akaze_found = await image_ops.akaze_reverse_search(image_buffer)
-        res.send(akaze_found)
-    }
+    const results = await image_ops.get_similar_images(image_buffer)
+    return results
 }
 
 export default {
