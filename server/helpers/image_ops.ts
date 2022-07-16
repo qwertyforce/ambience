@@ -59,6 +59,20 @@ async function calculate_color_features(image_id: number, image: Buffer) {
     return status.data
 }
 
+async function calculate_text_features(image_id: number, image: Buffer) {
+    const form = new FormData()
+    form.append('image', image, { filename: 'document' }) //hack to make nodejs buffer work with form-data
+    form.append('image_id', image_id.toString())
+    const status = await axios.post(`${config.text_microservice_url}/calculate_text_features`, form.getBuffer(), {
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity,
+        headers: {
+            ...form.getHeaders()
+        }
+    })
+    return status.data
+}
+
 interface ImageSearchProps{
     image:Buffer,
     k?:number,
@@ -274,6 +288,11 @@ async function delete_phash_features_by_id(image_id: number) {
     const status = await axios.post(`${config.phash_microservice_url}/delete_phash_features`, { image_id: image_id })
     return status.data
 }
+
+async function delete_text_features_by_id(image_id: number) {
+    const status = await axios.post(`${config.text_microservice_url}/delete_text_features`, { image_id: image_id })
+    return status.data
+}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -284,6 +303,7 @@ async function calculate_all_image_features(image_id: number, image_buffer: Buff
         calculate_local_features(image_id, image_buffer),
         calculate_color_features(image_id, image_buffer),
         calculate_phash_features(image_id, image_buffer),
+        calculate_text_features(image_id, image_buffer)
     ])
 }
 
@@ -292,7 +312,8 @@ async function delete_all_image_features(image_id: number) {
         delete_global_features_by_id(image_id),
         delete_local_features_by_id(image_id),
         delete_color_features_by_id(image_id),
-        delete_phash_features_by_id(image_id)
+        delete_phash_features_by_id(image_id),
+        delete_text_features_by_id(image_id)
     ])
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
