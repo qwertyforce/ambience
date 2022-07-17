@@ -1,11 +1,11 @@
 import config from './../config/config'
-import fastifyMultipart from 'fastify-multipart'
+import fastifyMultipart from '@fastify/multipart'
 import fastify from 'fastify'
-import formBodyPlugin from 'fastify-formbody'
-import fastifyReplyFrom from 'fastify-reply-from'
-// import fastifyCors from '@fastify/cors'
+import formBodyPlugin from '@fastify/formbody'
+import fastifyReplyFrom from '@fastify/reply-from'
+import fastifyCors from '@fastify/cors'
 // import multiparty from 'multiparty'
-const server = fastify({logger:false})
+const server = fastify({logger:true})
 
 // server.addHook('preHandler', function (req, _reply, done) {
 //     var form = new multiparty.Form({autoFiles:true,uploadDir:"./uploads/"})
@@ -13,10 +13,10 @@ const server = fastify({logger:false})
 //     done()
 //   })
 
-// server.register(fastifyCors, {
-//     "origin": "*",
-//     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-//   })
+server.register(fastifyCors, {
+    "origin": "*",
+    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+  })
 const port = config.server_port
 
 function combineURLs(baseURL: string, relativeURL: string) { //https://stackoverflow.com/a/49966753
@@ -33,7 +33,6 @@ server.register(async function (app) {
     app.register(formBodyPlugin)
     app.register(fastifyMultipart, {
         attachFieldsToBody: true,
-        sharedSchemaId: '#mySharedSchema',
         limits: {
             fieldNameSize: 100, // Max field name size in bytes
             fieldSize: 1000,     // Max field value size in bytes
@@ -53,8 +52,9 @@ server.register(fastifyReplyFrom,{http: {agentOptions: {keepAliveMsecs: 10 * 60 
 server.addContentTypeParser('multipart/form-data', function (_request, payload, done) {
     done(null, payload)  //https://github.com/fastify/help/issues/67
 })
+
 const local_features_routes = ['/local_features_get_similar_images_by_image_buffer','/local_features_get_similar_images_by_id', '/calculate_local_features', '/delete_local_features']
-local_features_routes.forEach((r) => server.post(r, async (_req, res) => {
+local_features_routes.forEach((r) => server.post(r, (_req, res) => {
     try {
         res.from(combineURLs(config.local_features_microservice_url, r))
     } catch (err) {
@@ -64,7 +64,7 @@ local_features_routes.forEach((r) => server.post(r, async (_req, res) => {
 }))
 
 const global_features_routes = ['/global_features_get_similar_images_by_image_buffer', '/global_features_get_similar_images_by_id', '/calculate_global_features', '/delete_global_features']
-global_features_routes.forEach((r) => server.post(r, async (_req, res) => {
+global_features_routes.forEach((r) => server.post(r, (_req, res) => {
     try {
         res.from(combineURLs(config.global_features_microservice_url, r))
     } catch (err) {
@@ -74,7 +74,7 @@ global_features_routes.forEach((r) => server.post(r, async (_req, res) => {
 }))
 
 const color_routes = ['/color_get_similar_images_by_image_buffer', '/color_get_similar_images_by_id', '/calculate_color_features', '/delete_color_features']
-color_routes.forEach((r) => server.post(r, async (_req, res) => {
+color_routes.forEach((r) => server.post(r, (_req, res) => {
     try {
         res.from(combineURLs(config.color_microservice_url, r))
     } catch (err) {
@@ -84,7 +84,7 @@ color_routes.forEach((r) => server.post(r, async (_req, res) => {
 }))
 
 const text_routes = ['/text_get_similar_images_by_image_buffer', '/text_get_similar_images_by_id', '/calculate_text_features', '/delete_text_features']
-text_routes.forEach((r) => server.post(r, async (_req, res) => {
+text_routes.forEach((r) => server.post(r, (_req, res) => {
     try {
         res.from(combineURLs(config.text_microservice_url, r))
     } catch (err) {
@@ -94,7 +94,7 @@ text_routes.forEach((r) => server.post(r, async (_req, res) => {
 }))
 
 const phash_routes = ['/phash_get_similar_images_by_image_buffer', '/calculate_phash_features', '/delete_phash_features']
-phash_routes.forEach((r) => server.post(r, async (_req, res) => {
+phash_routes.forEach((r) => server.post(r, (_req, res) => {
     try {
         res.from(combineURLs(config.phash_microservice_url, r))
     } catch (err) {
@@ -104,7 +104,7 @@ phash_routes.forEach((r) => server.post(r, async (_req, res) => {
 }))
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-server.listen(port, "127.0.0.1", function (err, address) {
+server.listen({port:port, host:"127.0.0.1"}, function (err, address) {
     if (err) {
         console.error(err)
         process.exit(1)

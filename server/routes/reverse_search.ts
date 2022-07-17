@@ -4,7 +4,15 @@ import image_ops from "./../helpers/image_ops"
 const body_schema_reverse_search = {
     type: 'object',
     properties: {
-        image: { $ref: '#mySharedSchema' },
+        image: {
+            type: 'object',
+            properties: {
+              encoding: { type: 'string' },
+              filename: { type: 'string' },
+              limit: { type: 'boolean' },
+              mimetype: { type: 'string' }
+            }
+          }
     },
     required: ['image'],
 } as const;

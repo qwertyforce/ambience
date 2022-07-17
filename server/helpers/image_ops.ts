@@ -2,7 +2,6 @@ import config from "../../config/config"
 import FormData from 'form-data'
 import axios from 'axios'
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function calculate_phash_features(image_id: number, image: Buffer) {
     const form = new FormData()

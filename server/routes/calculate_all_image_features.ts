@@ -1,10 +1,19 @@
-import { FastifyRequest, FastifyReply } from "fastify"
+import  { FastifyRequest, FastifyReply } from "fastify"
 import { FromSchema } from "json-schema-to-ts";
 import image_ops from "./../helpers/image_ops"
 const body_schema_calculate_all_image_features = {
     type: 'object',
     properties: {
-        image: { $ref: '#mySharedSchema' },
+        image: {
+            type: 'object',
+            properties: {
+                encoding: { type: 'string' },
+                filename: { type: 'string' },
+                limit: { type: 'boolean' },
+                mimetype: { type: 'string' }
+            }
+        },
+        name: { type: 'string' },
         image_id: {
             type: "object",
             properties: {
