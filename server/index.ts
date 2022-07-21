@@ -4,12 +4,30 @@ import fastify from 'fastify'
 import formBodyPlugin from '@fastify/formbody'
 import fastifyReplyFrom from '@fastify/reply-from'
 import fastifyCors from '@fastify/cors'
-// import multiparty from 'multiparty'
+// import busboy from '@fastify/busboy'
+// import fs from 'fs'
+// import path from 'path'
 const server = fastify({logger:true})
 
-// server.addHook('preHandler', function (req, _reply, done) {
-//     var form = new multiparty.Form({autoFiles:true,uploadDir:"./uploads/"})
-//     form.parse(req.raw)
+// server.addHook('onRequest', function (req, _reply, done) {
+//     console.log(req.raw)
+//     if (req.raw.headers['content-type'] && req.raw.headers['content-type'].includes("multipart/form-data;")) {
+//         const bb = busboy({
+//             headers: { "content-type": req.raw.headers['content-type'] }, limits: {
+//                 fieldNameSize: 100, // Max field name size in bytes
+//                 fieldSize: 10,     // Max field value size in bytes
+//                 fields: 10,         // Max number of non-file fields
+//                 fileSize: 50000000,  // For multipart forms, the max file size in bytes  //50MB
+//                 files: 1,           // Max number of file fields
+//                 headerPairs: 2000   // Max number of header key=>value pairs
+//             }
+//         })
+//         bb.on('file', (_name, file, _info) => {
+//             const saveTo = path.join("./uploads", `${new Date().getTime()}.jpg`)
+//             file.pipe(fs.createWriteStream(saveTo))
+//         });
+//         req.raw.pipe(bb)
+//     }
 //     done()
 //   })
 
@@ -35,7 +53,7 @@ server.register(async function (app) {
         attachFieldsToBody: true,
         limits: {
             fieldNameSize: 100, // Max field name size in bytes
-            fieldSize: 1000,     // Max field value size in bytes
+            fieldSize: 10,     // Max field value size in bytes
             fields: 10,         // Max number of non-file fields
             fileSize: 50000000,  // For multipart forms, the max file size in bytes  //50MB
             files: 1,           // Max number of file fields
