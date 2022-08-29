@@ -12,7 +12,8 @@ const body_schema_reverse_search = {
               limit: { type: 'boolean' },
               mimetype: { type: 'string' }
             }
-          }
+          },
+        find_duplicate: {type: 'string'}
     },
     required: ['image'],
 } as const;
@@ -24,7 +25,7 @@ async function reverse_search(req: FastifyRequest<{ Body: FromSchema<typeof body
     } catch (err) {
         return res.status(500).send()
     }
-    const results = await image_ops.get_similar_images(image_buffer)
+    const results = await image_ops.get_similar_images(image_buffer,Boolean(parseInt(req.body?.find_duplicate||"0")))
     return results
 }
 
