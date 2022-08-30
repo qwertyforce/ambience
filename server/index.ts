@@ -1,7 +1,6 @@
 import config from './../config/config'
 import fastifyMultipart from '@fastify/multipart'
 import fastify from 'fastify'
-import formBodyPlugin from '@fastify/formbody'
 import fastifyReplyFrom from '@fastify/reply-from'
 import fastifyCors from '@fastify/cors'
 // import busboy from '@fastify/busboy'
@@ -48,7 +47,6 @@ import delete_all_image_features from "./routes/delete_all_image_features"
 import reverse_search from "./routes/reverse_search"
 
 server.register(async function (app) {
-    app.register(formBodyPlugin)
     app.register(fastifyMultipart, {
         attachFieldsToBody: true,
         limits: {

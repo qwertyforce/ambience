@@ -281,7 +281,7 @@ async function get_similar_images(image: Buffer,find_duplicate:boolean) {
     if(find_duplicate){
         local_features_res = (await local_features_get_similar_images_by_image_buffer({
             image: image, k: 5, k_clusters: 15,
-            knn_min_matches: 1, matching_threshold: 0.8,
+            knn_min_matches: 4, matching_threshold: 0.8,
             use_smnn_matching: 1, use_ransac: 1
         })).filter((el:any)=>el["matches"]>=8)
     }else{
@@ -290,7 +290,7 @@ async function get_similar_images(image: Buffer,find_duplicate:boolean) {
             global_features_get_similar_images_by_image_buffer({ image: image, k: 200 }),
             local_features_get_similar_images_by_image_buffer({
                 image: image, k: 200, k_clusters: 10,
-                knn_min_matches: 1, matching_threshold: 0.8,
+                knn_min_matches: 4, matching_threshold: 0.8,
                 use_smnn_matching: 1, use_ransac: 1
             }),
             color_get_similar_images_by_image_buffer({ image: image, k: 200 }),
