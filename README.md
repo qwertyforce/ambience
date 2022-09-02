@@ -1,5 +1,6 @@
 # ambience
 reverse image search and similarity search engine <br>
+[How it works.md](https://github.com/qwertyforce/ambience/blob/main/how_it_works_search.md)  
 a wrapper for: 
 - (global_features_web - https://github.com/qwertyforce/global_features_web)
 - (local_features_web - https://github.com/qwertyforce/local_features_web)
