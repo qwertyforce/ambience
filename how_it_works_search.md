@@ -213,7 +213,7 @@ Cons:
 - Takes into account only colors, does not take into account geometry
 
 # local_features_web
-[[Colab](https://colab.research.google.com/github/qwertyforce/image_search/blob/main/rgb_hist_new.ipynb)]  
+[[Colab](https://colab.research.google.com/github/qwertyforce/image_search/blob/main/local_features.ipynb)]  
 P.S Colab version doesn't use keypoint detection method from the text, it's just finding top 200 keypoints (I am too lazy to adjust the code).  
 <img src="./images_md/colab_matches.png" width=70% height=70%>  
 
@@ -276,7 +276,7 @@ Cons:
 - Can't find an image if it's downscaled too much (it can't find originals by thumbnails :( , I don't know if this issue can be solved without sacrificing search speed)
 
 # global_features_web
-[[Colab](https://colab.research.google.com/github/qwertyforce/image_search/blob/main/rgb_hist_new.ipynb)]
+[[Colab](https://colab.research.google.com/github/qwertyforce/image_search/blob/main/global_features.ipynb)]
 
 <img src="./images_md/global_features.png" width=70% height=70%>  
 
@@ -343,7 +343,7 @@ Cons:
 - Can't find crops
 - Model trained on imagenet-21k may not suit you
 # image_text_features_web
-[[Colab](https://colab.research.google.com/github/qwertyforce/image_search/blob/main/rgb_hist_new.ipynb)]  
+[[Colab](https://colab.research.google.com/github/qwertyforce/image_search/blob/main/image_text_features.ipynb)]  
 <img src="./images_md/clip.png" width=70% height=70%>  
 
 >Zero-shot CLIP is
