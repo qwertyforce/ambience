@@ -15,7 +15,7 @@ current microservices:
 - text_web (not released yet) 
 
 In the text below, I will try to briefly explain how they work, show search examples, runnable examples (Google Colab), links for further reading, and various tips/tricks.
-If you want to read about the photo gallery, click here
+If you want to read about the photo gallery, click [here](https://github.com/qwertyforce/scenery/blob/master/how_it_works_scenery.md)
 
 
 
