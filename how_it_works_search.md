@@ -53,7 +53,7 @@ There are a lot of various perceptual hashing algorithms, such as aHash, dHash, 
 [ImageHash](https://github.com/JohannesBuchner/imagehash)).  
 Usually, Hamming distance is used for comparing these hashes. Less distance -> probability of images being the same is higher (false positivities still can occur).  
 PDQ Hash (https://github.com/faustomorales/pdqhash-python) - is a hashing algorithm designed by Facebook, inspired by pHash, with some optimizations, like bigger hash size, usage of Luminance instead of greyscale, and others.
-As well put in еру PDQ paper, there are syntactic and semantic methods of hashing images:  
+As well put in the PDQ paper, there are syntactic and semantic methods of hashing images:  
 <img src="./images_md/synth_semantic_hashing.png" width=70% height=70%>  
 
 >TMK+PDQF and PDQ are syntactic rather than semantic hashers. Algorithms in the latter category detect features
@@ -64,7 +64,7 @@ contrast, we simply want to see if two images are essentially the same, having a
 about the images, nor their context.  
 (https://github.com/facebook/ThreatExchange/blob/main/hashing/hashing.pdf)
 
-Although PDQ is potentially better than phash, I used phash DCT with 576 bit hash size, because it seems, that PDQ is less sensitive than phash. On the image below we can see, that hamming distance between these images is 22 for PDQ and 110 for phash. One can argue that images are similar,    
+Although PDQ is potentially better than phash, I used phash DCT with 576 bit hash size, because it seems, that PDQ is less sensitive than phash. On the image below we can see, that hamming distance between these images is 22 for PDQ and 110 for phash.  
 <img src="./images_md/pdqVSphash_dct.png" width=70% height=70%>  
 
 I rewrote phash code from ImageHash library(https://github.com/JohannesBuchner/imagehash/blob/master/imagehash.py#L197), which was implemented by this article https://hackerfactor.com/blog/index.php%3F/archives/432-Looks-Like-It.html.
@@ -137,7 +137,7 @@ Pros:
 - hash has a small size (576 bit or 72 bytes, 72 MB for 1 million images)  
 - can be calculated very quickly  
 - search is fast  
-- using an optimal threshold value, there are quite a few false positives.  
+- using an optimal threshold value, there are not a lot of false positives 
 
 Cons:  
 - unstable to geometric transformations (for example, cropping, mirroring, rotations): gives a totally different hash.
@@ -244,7 +244,7 @@ The second problem is that HardNet8 uses 512 bytes (128 floats32) for 1 descript
 
 In order to speed up the search, it is necessary to carry it out in RAM, and for this, it is necessary to reduce the amount of memory occupied by vectors. This can be achieved by quantizing them. Quantization of vectors allows you to significantly reduce the size of the vector. To do this, the PQ (Product Quantization) approach is used, as well as an optimization that increases the accuracy of compressed vectors – OPQ (Optimized Product Quantization).
 
-The IVF index(Inverted File Index) is a method of Approximate nearest neighbor search (ANN). It allows you to “sacrifice” accuracy in order to increase performance. It works according to the following principle: using the K-Means algorithm, there are K clusters in a vector space. Then, each of the vectors is added to the cluster closest to it. At search time, bruteforce compares only the vectors located in the ```nprobe``` of the closest clusters to the desired vector. This allows you to reduce the search area. By adjusting the nprobe parameter, you can influence the ratio of speed and accuracy, the higher this parameter, the more clusters will be checked, respectively, the accuracy and operating time become longer. Conversely, when this parameter decreases, the accuracy, as well as the search time, decreases.
+The IVF index(Inverted File Index) is a method of Approximate nearest neighbor search (ANN). It allows you to “sacrifice” accuracy in order to increase search speeed. It works according to the following principle: using the K-Means algorithm, there are K clusters in a vector space. Then, each of the vectors is added to the cluster closest to it. At search time, bruteforce compares only the vectors located in the ```nprobe``` of the closest clusters to the vector we use for the search. This allows you to reduce the search area. By adjusting the nprobe parameter, you can influence the ratio of speed and accuracy, the higher this parameter, the more clusters will be checked, respectively, the accuracy and search time become longer. Conversely, when this parameter decreases, the accuracy, as well as the search time, decreases.
 
 After the search is done, we want to know which descriptors belong to which image. To make this possible we have to keep a relation between image_id and ID of a keypoint/descriptor. Keypoint and corresponding descriptor get a sequential id. 
 I tested the performance of sqlite, python library which implements Interval Tree, and PostgreSQL Gist Index. The numbers below are for about 800_000 keypoints/descriptors.
@@ -408,7 +408,7 @@ Main idea: OCR text -> save original and metaphone'd versions of text to Postrgr
 WIP (Trying to find a way to get a decent result in comparing words from different languages, no luck yet :|, maybe something like a universal phonetic alphabet is a good idea...)
 # ambience
 Ambience is an API Gateway for all these microservices, which proxies/unites them. For example: to calculate all features you need, you can send a request to ambience which in turn sends requests to other microservices, instead of using microservices directly. That helps in separating image search logic and photo gallery logic.
-Ambience is built with Node.js and fastify. For proxifing requests, [fastify-reply-from](https://github.com/fastify/fastify-reply-from) is used, which uses [undici](https://www.npmjs.com/package/undici) as an http client, that is significantly faster than built-in http client provided by node.js. Also, in /reverse_search endpoint you can merge search results from different microservices, building a more relevant search ... As an example, simple logic: if image occurs in search results of different microservices, it means that there's a big chance that this image is more relevant than others, so you can move it up in search results. 
+Ambience is built with Node.js and fastify. For proxifing requests, [fastify-reply-from](https://github.com/fastify/fastify-reply-from) is used, which uses [undici](https://www.npmjs.com/package/undici) as an http client, that is significantly faster than built-in http client provided by node.js. Also, in /reverse_search endpoint you can merge search results from different microservices, building a more relevant search. As an example, simple logic: if image occurs in search results of different microservices, it means that there's a big chance that this image is more relevant than others, so you can move it up in search results. 
 #
 As you can see image retrieval is such an interesting problem! 
 I would say, that information becomes useful, only when you can perform a search, otherwise, it's just a pile of ones and zeros.
