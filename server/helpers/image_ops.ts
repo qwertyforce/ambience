@@ -293,7 +293,7 @@ async function get_similar_images(image: Buffer, find_duplicate:boolean) {
         }
     }else{
         [phash_res, global_features_res,local_features_res,color_res,image_text_res]  = (await Promise.allSettled([
-            phash_get_similar_images_by_image_buffer({ image: image, k: 200 }),
+            phash_get_similar_images_by_image_buffer({ image: image, distance_threshold: 64 }),
             global_features_get_similar_images_by_image_buffer({ image: image, k: 200 }),
             local_features_get_similar_images_by_image_buffer({
                 image: image, k: 200, k_clusters: 10,
