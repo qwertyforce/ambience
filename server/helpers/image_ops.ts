@@ -271,7 +271,7 @@ async function local_features_get_similar_images_by_image_buffer({ image,
 //     }
 // }
 
-async function get_similar_images(image: Buffer,find_duplicate:boolean) {
+async function get_similar_images(image: Buffer, find_duplicate:boolean) {
     let phash_res:any = []
     let global_features_res:any = []
     let local_features_res:any = [] 
@@ -279,11 +279,18 @@ async function get_similar_images(image: Buffer,find_duplicate:boolean) {
     let image_text_res:any  = [];
     // const text_res = await text_get_similar_images_by_image_buffer({image:image,k:200})
     if(find_duplicate){
-        local_features_res = (await local_features_get_similar_images_by_image_buffer({
-            image: image, k: 5, k_clusters: 15,
-            knn_min_matches: 4, matching_threshold: 0.8,
-            use_smnn_matching: 1, use_ransac: 1
-        })).filter((el:any)=>el["matches"]>=8)
+        // local_features_res = (await local_features_get_similar_images_by_image_buffer({
+        //     image: image, k: 5, k_clusters: 15,
+        //     knn_min_matches: 4, matching_threshold: 0.8,
+        //     use_smnn_matching: 1, use_ransac: 1
+        // })).filter((el:any)=>el["matches"]>=8)
+        let res = await phash_get_similar_images_by_image_buffer({ image: image, distance_threshold: 64 })
+        if (res.length>=1){
+            return {duplicate:res}
+        }
+        else{
+            return {}
+        }
     }else{
         [phash_res, global_features_res,local_features_res,color_res,image_text_res]  = (await Promise.allSettled([
             phash_get_similar_images_by_image_buffer({ image: image, k: 200 }),
