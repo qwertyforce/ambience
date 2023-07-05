@@ -34,18 +34,23 @@ async function calculate_all_image_features(req: FastifyRequest<{ Body: FromSche
     if (req.body.image_id.value) {
         const image_id = parseInt(req.body.image_id.value)
         const results:any = await image_ops.calculate_all_image_features(image_id, image_buffer)
-        console.log(results[3])
+        
         for(let i=0;i<results.length;i++){
             const new_obj:any = {status:results[i].status}
             if(results[i]?.reason?.message){
                 new_obj.reason = results[i].reason.message
             }
-            if(results[i]?.value!==undefined){
-                new_obj.value=results[i].value
-            }
             if(results[i]?.reason?.response?.data){
                 new_obj.data=results[i]?.reason?.response?.data
             }
+            if(results[i]?.reason?.config?.url){
+                new_obj.url=results[i]?.reason?.config?.url
+            }
+            if(results[i]?.value){
+                new_obj.value=results[i].value.data
+                new_obj.url=results[i].value.config.url
+            }
+            
             results[i] = new_obj
         }
         console.log(results)

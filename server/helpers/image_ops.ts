@@ -14,7 +14,7 @@ async function calculate_phash_features(image_id: number, image: Buffer) {
             ...form.getHeaders()
         }
     })
-    return status.data
+    return status
 }
 
 async function calculate_local_features(image_id: number, image: Buffer) {
@@ -28,7 +28,7 @@ async function calculate_local_features(image_id: number, image: Buffer) {
             ...form.getHeaders()
         }
     })
-    return status.data
+    return status
 }
 
 async function calculate_global_features(image_id: number, image: Buffer) {
@@ -42,7 +42,7 @@ async function calculate_global_features(image_id: number, image: Buffer) {
             ...form.getHeaders()
         }
     })
-    return status.data
+    return status
 }
 
 async function calculate_image_text_features(image_id: number, image: Buffer) {
@@ -56,7 +56,7 @@ async function calculate_image_text_features(image_id: number, image: Buffer) {
             ...form.getHeaders()
         }
     })
-    return status.data
+    return status
 }
 async function calculate_color_features(image_id: number, image: Buffer) {
     const form = new FormData()
@@ -69,7 +69,7 @@ async function calculate_color_features(image_id: number, image: Buffer) {
             ...form.getHeaders()
         }
     })
-    return status.data
+    return status
 }
 
 // async function calculate_text_features(image_id: number, image: Buffer) {
@@ -390,27 +390,27 @@ async function get_similar_images(image: Buffer, find_duplicate:boolean) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function delete_local_features_by_id(image_id: number) {
     const status = await axios.post(`${config.local_features_microservice_url}/delete_local_features`, { image_id: image_id })
-    return status.data
+    return status
 }
 
 async function delete_global_features_by_id(image_id: number) {
     const status = await axios.post(`${config.global_features_microservice_url}/delete_global_features`, { image_id: image_id })
-    return status.data
+    return status
 }
 
 async function delete_image_text_features_by_id(image_id: number) {
     const status = await axios.post(`${config.image_text_features_microservice_url}/delete_image_text_features`, { image_id: image_id })
-    return status.data
+    return status
 }
 
 async function delete_color_features_by_id(image_id: number) {
     const status = await axios.post(`${config.color_microservice_url}/delete_color_features`, { image_id: image_id })
-    return status.data
+    return status
 }
 
 async function delete_phash_features_by_id(image_id: number) {
     const status = await axios.post(`${config.phash_microservice_url}/delete_phash_features`, { image_id: image_id })
-    return status.data
+    return status
 }
 
 // async function delete_text_features_by_id(image_id: number) {
@@ -423,8 +423,8 @@ async function delete_phash_features_by_id(image_id: number) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function calculate_all_image_features(image_id: number, image_buffer: Buffer) {
     return Promise.allSettled([
-        calculate_global_features(image_id, image_buffer),
-        calculate_local_features(image_id, image_buffer),
+        // calculate_global_features(image_id, image_buffer),
+        // calculate_local_features(image_id, image_buffer),
         calculate_color_features(image_id, image_buffer),
         calculate_phash_features(image_id, image_buffer),
         calculate_image_text_features(image_id, image_buffer),
@@ -434,8 +434,8 @@ async function calculate_all_image_features(image_id: number, image_buffer: Buff
 
 async function delete_all_image_features(image_id: number) {
     return Promise.allSettled([
-        delete_global_features_by_id(image_id),
-        delete_local_features_by_id(image_id),
+        // delete_global_features_by_id(image_id),
+        // delete_local_features_by_id(image_id),
         delete_color_features_by_id(image_id),
         delete_phash_features_by_id(image_id),
         delete_image_text_features_by_id(image_id)
