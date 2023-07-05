@@ -148,7 +148,7 @@ server.post("/get_image_caption", (_req, res) => {
 })
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-server.listen({port:port, host:"0.0.0.0"}, function (err, address) {
+server.listen({port:port, host:config.host}, function (err, address) {
     if (err) {
         console.error(err)
         process.exit(1)
