@@ -12,7 +12,12 @@ API Gateway for:
 
 ## Installation  
 1. Clone the repository  
-2. ```npm install```  
+2. ```npm install```
 ## Usage
 ```npm run build```  -> builds .ts files  
 ```npm run start``` -> starts the server  
+## Docker  
+```docker network create --driver bridge ambience_net ``` -> create network for microservices  
+```docker build -t qwertyforce/ambience:1.0.0 --network host -t qwertyforce/ambience:latest ./``` -> build  
+```docker run -d --rm -p 127.0.0.1:44444:44444 --network=ambience_net --name ambience qwertyforce/ambience:1.0.0``` -> run as daemon
+
