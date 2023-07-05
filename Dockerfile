@@ -6,7 +6,7 @@ ARG USER_GID=1001
 
 WORKDIR /app
 COPY ./ ./
-RUN rm ./src/config/config.js && mv ./src/config/config_docker.js ./src/config/config.js
+RUN rm ./config/config.js && mv ./config/config_docker.js ./config/config.js
 RUN npm install
 RUN npm run build
 
