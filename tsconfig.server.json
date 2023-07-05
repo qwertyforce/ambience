@@ -5,7 +5,8 @@
     "outDir": "dist",
     "target": "esnext",
     "isolatedModules": false,
-    "noEmit": false
+    "noEmit": false,
+    "noUnusedLocals": false,
   },
   "include": ["server/**/*.ts"]
 }
